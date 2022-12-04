@@ -1,0 +1,8 @@
+{
+  "name": "web-telegram-be",
+  "version": "1.0.0",
+  "description": "Web telegram backend",
+  "main": "index.js",
+  "author": "Ahmad Fayruz Syamil",
+  "license": "MIT"
+}
