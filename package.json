@@ -4,5 +4,17 @@
   "description": "Web telegram backend",
   "main": "index.js",
   "author": "Ahmad Fayruz Syamil",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.20",
+    "telegram": "^2.14.7"
+  },
+  "scripts": {
+    "server": "nodemon ./src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate": "npx sequelize-cli db:migrate"
+  }
 }
