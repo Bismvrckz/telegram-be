@@ -1,6 +1,7 @@
 const express = require("express");
-const sendCodeController = require("../../controllers/gramjs/sendCode");
 const router = express.Router();
+const resendCodeController = require("../../controllers/gramjs/resendCode");
+const sendCodeController = require("../../controllers/gramjs/sendCode");
 
 async function sendCodeFunction(req, res, next) {
   try {
@@ -49,6 +50,32 @@ async function sendCodeFunction(req, res, next) {
   }
 }
 
+async function resendCodeFunction(req, res, next) {
+  try {
+    const { phoneNumber, phoneCodeHash } = req.body;
+
+    const resResendCode = await resendCodeController({
+      phoneNumber,
+      phoneCodeHash,
+    });
+
+    console.log({ resResendCode });
+
+    if (resResendCode.error) {
+      throw resResendCode.error;
+    }
+
+    res.send({
+      status: "Success",
+      httpCode: 200,
+      resResendCode,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 router.post("/sendCode", sendCodeFunction);
+router.post("/resendCode", resendCodeFunction);
 
 module.exports = router;

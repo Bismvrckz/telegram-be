@@ -14,7 +14,7 @@ async function signInController({ phoneNumber, phoneCodeHash, phoneCode }) {
 
     const savedSession = client.session.save();
 
-    return { result, savedSession };
+    return { userDetail: result.user, savedSession };
   } catch (error) {
     return { error };
   }

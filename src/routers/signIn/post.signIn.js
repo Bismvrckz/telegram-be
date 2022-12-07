@@ -22,7 +22,7 @@ async function signInFunction(req, res, next) {
     res.send({
       status: "Success",
       httpCode: 200,
-      resSignIn,
+      user: resSignIn,
     });
   } catch (error) {
     next(error);

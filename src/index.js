@@ -3,6 +3,7 @@ const cors = require("cors");
 const app = express();
 
 const countriesListRouter = require("./routers/countriesList");
+const messagesRouter = require("./routers/messages");
 const phoneCodeRouter = require("./routers/sendCode");
 const signInRouter = require("./routers/signIn");
 
@@ -14,6 +15,7 @@ app.use("/public", express.static("public"));
 
 app.use("/countriesList", countriesListRouter);
 app.use("/phoneCode", phoneCodeRouter);
+app.use("/messages", messagesRouter);
 app.use("/signIn", signInRouter);
 
 app.use((error, req, res, next) => {
