@@ -5,11 +5,11 @@ const router = express.Router();
 async function getALlChatsFunction(req, res, next) {
   try {
     const { savedSession } = req.query;
-    let resGetAllChats = await getALlChatsController({
-      stringSession: savedSession,
-    });
+    // let resGetAllChats = await getALlChatsController({
+    //   stringSession: savedSession,
+    // });
 
-    console.log(resGetAllChats);
+    // console.log(resGetAllChats);
 
     // resGetAllChats = resGetAllChats.filter((element) => {
     //   return element != 0;
@@ -25,7 +25,7 @@ async function getALlChatsFunction(req, res, next) {
     res.send({
       status: "Success",
       httpCode: 200,
-      resGetAllChats,
+      // resGetAllChats,
     });
   } catch (error) {
     next(error);
