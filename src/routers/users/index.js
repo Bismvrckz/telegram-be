@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const postMessage = require("./post.message");
+const getUsersRouter = require("./get.users");
 
-router.use(postMessage);
+router.use(getUsersRouter);
 
 module.exports = router;

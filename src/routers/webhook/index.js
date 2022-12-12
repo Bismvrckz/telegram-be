@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const postMessage = require("./post.message");
+const webhookUpdatesRouter = require("./updates.webhook");
 
-router.use(postMessage);
+router.use(webhookUpdatesRouter);
 
 module.exports = router;
