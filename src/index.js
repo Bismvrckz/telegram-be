@@ -32,9 +32,10 @@ app.use("/signIn", signInRouter);
 app.use("/users", usersRouter);
 app.use(URI, webhookRouter);
 
+app.use("/public", express.static("public"));
+
 app.use((error, req, res, next) => {
-  console.log({ error });
-  console.log(error.response);
+  error.response ? console.log(error.response.data) : console.log({ error });
 
   const errorObj = {
     status: "Error",

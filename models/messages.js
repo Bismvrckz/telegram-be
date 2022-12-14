@@ -30,6 +30,13 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.BIGINT,
       },
+      messageType: {
+        type: DataTypes.ENUM("Image", "Message"),
+      },
+      imageURL: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       is_bot: {
         type: DataTypes.BOOLEAN,
       },

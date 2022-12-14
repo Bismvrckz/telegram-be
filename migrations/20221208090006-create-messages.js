@@ -18,6 +18,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.BIGINT,
       },
+      messageType: {
+        type: Sequelize.ENUM("Image", "Message"),
+      },
+      imageURL: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       is_bot: {
         type: Sequelize.BOOLEAN,
       },

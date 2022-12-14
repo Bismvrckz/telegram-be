@@ -1,6 +1,7 @@
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
+const { front_end_updated } = require("../alerts");
 const { users, messages } = require("./../../../models");
 const app = express();
 require("dotenv").config();
@@ -15,17 +16,12 @@ const io = new Server(server, {
 });
 
 const update_front_end = async () => {
-  console.log(
-    "\n<-------------{ Update data terbaru ke front-end }------------->\n"
-  );
-  console.log("\n <<update_front_end jalan>> \n");
+  front_end_updated();
 
   const updated_user = await users.findAll({
     include: messages,
     order: [[messages, "updatedAt", "DESC"]],
   });
-
-  //   console.log(updated_user[0].messages);
 
   io.emit("update_new", { updated_user });
 };
