@@ -14,32 +14,14 @@ const imageMessageStorage = multer.diskStorage({
     cb(null, imageMessagePath);
   },
   filename: function (req, file, cb) {
-    const { image_id } = req;
-    console.log({ image_id });
-    cb(null, `${image_id}.png`);
+    cb(null, `${req.image_id}.png`);
   },
 });
 
 const saveImage = multer({
   storage: imageMessageStorage,
   limits: {
-    fileSize: 1048576,
-  },
-  fileFilter(req, file, cb) {
-    const allowedExtension = [".png", ".jpg", ".jpeg"];
-
-    const extname = path.extname(file.originalname);
-
-    console.log({ extname });
-
-    if (!allowedExtension.includes(extname)) {
-      const error = new error(
-        "Please upload a valid extension (jpg, jpeg, png)."
-      );
-      return cb(error);
-    }
-
-    cb(null, true);
+    fileSize: 10485760,
   },
 });
 

@@ -8,9 +8,6 @@ const { saveImage } = require("../../controllers/multer");
 const { sendBotImage } = require("../../components/imageMiddleware");
 const path = require("path");
 const appRoot = require("app-root-path");
-const imageMessagePath = path.join(appRoot.path, "public");
-const multer = require("multer");
-const upload = multer({ dest: imageMessagePath });
 const router = express.Router();
 
 async function sendMessageFunction(req, res, next) {
@@ -60,7 +57,9 @@ async function sendImageMessageFunction(req, res, next) {
       }
     );
 
-    const { file_id } = resSendImageMessageTelegram.data.result.photo[3];
+    const { photo } = resSendImageMessageTelegram.data.result;
+
+    const { file_id } = photo[photo.length - 1];
 
     const resGetFileTeleBot = await bot.getFile(file_id);
 
@@ -92,9 +91,69 @@ async function sendImageMessageFunction(req, res, next) {
 
 async function sendImageFileMessageFunction(req, res, next) {
   try {
-    console.log("Send Image File");
-    console.log({ imageMessagePath });
-    console.log(req.body);
+    let { chat_id, caption } = req.params;
+    console.log({ chat_id, caption });
+    if (caption != "empty_user_input") {
+      const imageMessagePath = path.join(
+        appRoot.path,
+        "public",
+        "messages",
+        "images",
+        `${req.image_id}.png`
+      );
+      const resSendFile = await bot.sendPhoto(chat_id, imageMessagePath, {
+        caption,
+      });
+
+      const { photo } = resSendFile;
+
+      const { file_id } = photo[photo.length - 1];
+
+      const resGetFileTeleBot = await bot.getFile(file_id);
+
+      await messages.create({
+        user_id: chat_id,
+        message_id: resSendFile.message_id,
+        messageType: "Image",
+        text: caption,
+        imageURL: resGetFileTeleBot.fileLink,
+        is_bot: true,
+      });
+
+      update_front_end();
+
+      return res.send({
+        status: "Success",
+        httpCode: 200,
+      });
+    }
+
+    const imageMessagePath = path.join(
+      appRoot.path,
+      "public",
+      "messages",
+      "images",
+      `${req.image_id}.png`
+    );
+    const resSendFile = await bot.sendPhoto(chat_id, imageMessagePath);
+
+    const { photo } = resSendFile;
+
+    const { file_id } = photo[photo.length - 1];
+
+    const resGetFileTeleBot = await bot.getFile(file_id);
+
+    await messages.create({
+      user_id: chat_id,
+      message_id: resSendFile.message_id,
+      messageType: "Image",
+      text: "",
+      imageURL: resGetFileTeleBot.fileLink,
+      is_bot: true,
+    });
+
+    update_front_end();
+
     res.send({
       status: "Success",
       httpCode: 200,
@@ -107,9 +166,9 @@ async function sendImageFileMessageFunction(req, res, next) {
 router.post("/sendMessage", sendMessageFunction);
 router.post("/sendImageMessage", sendImageMessageFunction);
 router.post(
-  "/sendImageFileMessage/:chat_id",
+  "/sendImageFileMessage/:chat_id/:caption",
   sendBotImage,
-  upload.single("messagePhoto"),
+  saveImage.single("image"),
   sendImageFileMessageFunction
 );
 
