@@ -36,6 +36,9 @@ app.use("/public", express.static("public"));
 
 app.use((error, req, res, next) => {
   error.response ? console.log(error.response.data) : console.log({ error });
+  error.errorMessage ? "" : (error.errorMessage = error.message);
+
+  console.log(error.response);
 
   const errorObj = {
     status: "Error",

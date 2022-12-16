@@ -19,9 +19,9 @@ module.exports = {
         type: Sequelize.BIGINT,
       },
       messageType: {
-        type: Sequelize.ENUM("Image", "Message"),
+        type: Sequelize.ENUM("Image", "Message", "Document"),
       },
-      imageURL: {
+      file_url: {
         type: Sequelize.STRING,
         allowNull: true,
       },

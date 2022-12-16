@@ -32,7 +32,6 @@ async function newMemberUpdateFunction({ req, res, next }) {
     console.log(`\n ###### 👹ONE OF US!!!!! ${username}👹\n`);
 
     update_front_end();
-
     return res.send();
   } catch (error) {
     return { error };

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const webhookUpdatesRouter = require("./updates.webhook");
+const webhookUpdatesRouter = require("./updates");
 
 router.use(webhookUpdatesRouter);
 

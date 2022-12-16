@@ -51,7 +51,6 @@ async function newImageMessageFunction({ req, res, next, message }) {
       console.log(
         `\n ###### ⚠️Message with id ${message_id} from ${username} already existed, watchout for query miss⚠️\n`
       );
-      console.log("");
       return res.send();
     }
 
@@ -63,7 +62,7 @@ async function newImageMessageFunction({ req, res, next, message }) {
       user_id: id,
       message_id,
       messageType: "Image",
-      imageURL: resGetFileTeleBot.fileLink,
+      file_url: resGetFileTeleBot.fileLink,
       is_bot: false,
     });
 
@@ -75,4 +74,43 @@ async function newImageMessageFunction({ req, res, next, message }) {
   }
 }
 
-module.exports = { newMessageUpdateFunction, newImageMessageFunction };
+async function newDocumentMessageFunction({ req, res, next, message }) {
+  try {
+    const { message_id, text, from, document } = message;
+    const { id, username } = from;
+
+    new_message();
+
+    const existed = await messages.findOne({ where: { message_id } });
+
+    if (existed) {
+      error_alert();
+      console.log(
+        `\n ###### ⚠️Message with id ${message_id} from ${username} already existed, watchout for query miss⚠️\n`
+      );
+      return res.send();
+    }
+
+    const resGetFileTeleBot = await bot.getFile(document.file_id);
+
+    await messages.create({
+      user_id: id,
+      message_id,
+      messageType: "Document",
+      file_url: resGetFileTeleBot.fileLink,
+      is_bot: false,
+    });
+
+    update_front_end();
+
+    return res.send();
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = {
+  newMessageUpdateFunction,
+  newImageMessageFunction,
+  newDocumentMessageFunction,
+};
