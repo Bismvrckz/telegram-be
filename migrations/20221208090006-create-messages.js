@@ -31,6 +31,10 @@ module.exports = {
       text: {
         type: Sequelize.STRING,
       },
+      forwarding_status: {
+        type: Sequelize.JSON,
+        allowNull: true,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

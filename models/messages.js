@@ -43,6 +43,10 @@ module.exports = (sequelize, DataTypes) => {
       text: {
         type: DataTypes.STRING,
       },
+      forwarding_status: {
+        type: DataTypes.JSON,
+        allowNull: true,
+      },
     },
     {
       sequelize,

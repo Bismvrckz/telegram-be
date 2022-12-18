@@ -77,6 +77,24 @@ function front_end_updated() {
   `);
 }
 
+function america_fyeah() {
+  console.log(`
+  |* * * * * * * * * * OOOOOOOOOOOOOOOOOOOOOOOOO|
+  | * * * * * * * * *  OOOOOOOOOOOOOOOOOOOOOOOOO|
+  |* * * * * * * * * * OOOOOOOOOOOOOOOOOOOOOOOOO|
+  | * * * * * * * * *  OOOOOOOOOOOOOOOOOOOOOOOOO|
+  |* * * * * * * * * * OOOOOOOOOOOOOOOOOOOOOOOOO|
+  | * * * * * * * * *  OOOOOOOOOOOOOOOOOOOOOOOOO|
+  |* * * * * * * * * * OOOOOOOOOOOOOOOOOOOOOOOOO|
+  |OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO|
+  |OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO|
+  |OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO|
+  |OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO|
+  |OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO|
+  |OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO|
+  `);
+}
+
 module.exports = {
   general_alert,
   error_alert,
@@ -85,4 +103,5 @@ module.exports = {
   customer_left,
   message_sent,
   front_end_updated,
+  america_fyeah,
 };

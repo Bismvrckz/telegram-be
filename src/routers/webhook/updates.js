@@ -36,6 +36,10 @@ async function updatesRecieverFunction(req, res, next) {
         return newDocumentMessageFunction({ req, res, next, message });
       }
 
+      if (message.forward_from) {
+        return;
+      }
+
       newMessageUpdateFunction({ req, res, next });
     }
 

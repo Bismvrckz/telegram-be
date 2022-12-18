@@ -76,7 +76,7 @@ async function newImageMessageFunction({ req, res, next, message }) {
 
 async function newDocumentMessageFunction({ req, res, next, message }) {
   try {
-    const { message_id, text, from, document } = message;
+    const { message_id, from, document } = message;
     const { id, username } = from;
 
     new_message();
