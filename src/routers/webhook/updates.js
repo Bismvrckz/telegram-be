@@ -7,12 +7,12 @@ const {
   newMessageUpdateFunction,
   newImageMessageFunction,
   newDocumentMessageFunction,
+  proxyMessageFunction,
 } = require("./updates.messages");
 const router = express.Router();
 
 async function updatesRecieverFunction(req, res, next) {
   try {
-    console.log(req.body);
     const { my_chat_member, message, edited_message } = req.body;
 
     if (my_chat_member) {
@@ -28,16 +28,16 @@ async function updatesRecieverFunction(req, res, next) {
     }
 
     if (message) {
+      if (message.forward_from) {
+        return proxyMessageFunction({ req, res, next, message });
+      }
+
       if (message.photo) {
         return newImageMessageFunction({ req, res, next, message });
       }
 
       if (message.document) {
         return newDocumentMessageFunction({ req, res, next, message });
-      }
-
-      if (message.forward_from) {
-        return;
       }
 
       newMessageUpdateFunction({ req, res, next });

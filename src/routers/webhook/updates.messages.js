@@ -2,6 +2,11 @@ const { messages } = require("../../../models");
 const { error_alert, new_message } = require("../../components/alerts");
 const { update_front_end } = require("../../components/socket.io");
 const bot = require("../../components/telebot");
+const {
+  imageProxy,
+  documentProxy,
+  textProxy,
+} = require("../../controllers/botProxy");
 
 async function newMessageUpdateFunction({ req, res, next }) {
   try {
@@ -109,8 +114,43 @@ async function newDocumentMessageFunction({ req, res, next, message }) {
   }
 }
 
+async function proxyMessageFunction({ req, res, next, message }) {
+  try {
+    new_message();
+
+    if (message.photo) {
+      return imageProxy({
+        req,
+        res,
+        next,
+        resForwardBot: message,
+        fromBot: false,
+      });
+    } else if (message.document) {
+      return documentProxy({
+        req,
+        res,
+        next,
+        resForwardBot: message,
+        fromBot: false,
+      });
+    } else {
+      return textProxy({
+        req,
+        res,
+        next,
+        resForwardBot: message,
+        fromBot: false,
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   newMessageUpdateFunction,
   newImageMessageFunction,
   newDocumentMessageFunction,
+  proxyMessageFunction,
 };

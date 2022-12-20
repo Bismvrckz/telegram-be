@@ -1,7 +1,7 @@
 const { default: axios } = require("axios");
 const express = require("express");
 const { messages } = require("../../../models");
-const { message_sent, america_fyeah } = require("../../components/alerts");
+const { message_sent } = require("../../components/alerts");
 const { update_front_end } = require("../../components/socket.io");
 const router = express.Router();
 

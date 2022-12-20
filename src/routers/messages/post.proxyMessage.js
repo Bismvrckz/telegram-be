@@ -1,15 +1,17 @@
 const express = require("express");
-const { messages } = require("../../../models");
 const { message_sent } = require("../../components/alerts");
-const { update_front_end } = require("../../components/socket.io");
 const bot = require("../../components/telebot");
+const {
+  textProxy,
+  imageProxy,
+  documentProxy,
+} = require("../../controllers/botProxy");
 const router = express.Router();
 
 async function proxyMessageFunction(req, res, next) {
   try {
-    console.log(req.body, req.params);
     const { destination_id } = req.params;
-    const { from, message_id, messageType } = req.body;
+    const { from, message_id } = req.body;
 
     const resForwardBot = await bot.forwardMessage(
       destination_id,
@@ -17,30 +19,15 @@ async function proxyMessageFunction(req, res, next) {
       parseInt(message_id)
     );
 
-    const { id, is_bot, first_name, username } = resForwardBot.forward_from;
-
     message_sent();
 
-    await messages.create({
-      user_id: destination_id,
-      message_id: resForwardBot.message_id,
-      messageType,
-      is_bot: true,
-      text: resForwardBot.text,
-      forwarding_status: {
-        id,
-        is_bot,
-        first_name,
-        username,
-      },
-    });
-
-    update_front_end();
-
-    res.send({
-      status: "Success",
-      httpCode: 200,
-    });
+    if (resForwardBot.photo) {
+      return imageProxy({ req, res, next, resForwardBot, fromBot: true });
+    } else if (resForwardBot.document) {
+      return documentProxy({ req, res, next, resForwardBot, fromBot: true });
+    } else {
+      return textProxy({ req, res, next, resForwardBot, fromBot: true });
+    }
   } catch (error) {
     next(error);
   }

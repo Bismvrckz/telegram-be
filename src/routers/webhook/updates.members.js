@@ -9,7 +9,6 @@ const {
 async function newMemberUpdateFunction({ req, res, next }) {
   try {
     const { my_chat_member } = req.body;
-    const { status } = my_chat_member.new_chat_member;
     const { id, is_bot, first_name, username } = my_chat_member.from;
 
     new_customer();
@@ -34,25 +33,25 @@ async function newMemberUpdateFunction({ req, res, next }) {
     update_front_end();
     return res.send();
   } catch (error) {
-    return { error };
+    next(error);
   }
 }
 
 async function leftMemberUpdateFunction({ req, res, next }) {
   try {
     const { my_chat_member } = req.body;
-    const { status } = my_chat_member.new_chat_member;
-    const { id, is_bot, first_name, username } = my_chat_member.from;
+    const { id, username } = my_chat_member.from;
 
     customer_left();
     await users.destroy({
       where: { user_id: id },
+      force: true,
     });
 
     await messages.destroy({
       where: { user_id: null },
+      force: true,
     });
-
     console.log(`\n ###### Gooodbye 👋, member ${username} has left\n`);
 
     update_front_end();

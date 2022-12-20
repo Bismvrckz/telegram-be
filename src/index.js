@@ -54,7 +54,7 @@ server.listen(PORT, async (error) => {
   if (error) {
     console.log(`ERROR: ${error}`);
   } else {
-    console.log(`APP RUNNING at ${PORT} ✅`);
+    console.log(`SERVER RUNNING at ${PORT} ✅`);
     await init();
   }
 });
