@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const postSendCodeRouter = require("./post.sendCode");
+const initBotWebhookRouter = require("./init.webhook");
 
-router.use(postSendCodeRouter);
+router.use(initBotWebhookRouter);
 
 module.exports = router;

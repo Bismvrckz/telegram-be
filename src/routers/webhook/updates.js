@@ -13,6 +13,7 @@ const router = express.Router();
 
 async function updatesRecieverFunction(req, res, next) {
   try {
+    console.log(req.body);
     const { my_chat_member, message, edited_message } = req.body;
 
     if (my_chat_member) {
@@ -41,24 +42,6 @@ async function updatesRecieverFunction(req, res, next) {
       }
 
       newMessageUpdateFunction({ req, res, next });
-    }
-
-    if (edited_message) {
-      const { message_id, text, from } = req.body.edited_message;
-      const { username } = from;
-
-      // await messages.update(
-      //   {
-      //     text,
-      //   },
-      //   {
-      //     where: { message_id },
-      //   }
-      // );
-
-      console.log(`Edited message \"${text}\" from ${username}`);
-
-      return res.send();
     }
 
     return res.send();
