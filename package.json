@@ -24,7 +24,7 @@
     "telegram": "^2.14.7"
   },
   "scripts": {
-    "server": "nodemon ./src/index.js",
+    "server": "nodemon ./src/index.js --watch log.txt",
     "test": "echo \"Error: no test specified\" && exit 1",
     "migrate": "npx sequelize-cli db:migrate"
   }

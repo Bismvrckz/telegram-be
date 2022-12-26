@@ -1,11 +1,9 @@
-async function bot({ botToken }) {
-  try {
-    const TeleBot = require("telebot");
+const { TOKEN } = process.env;
 
-    return new TeleBot(botToken);
-  } catch (error) {
-    console.log({ error });
-  }
-}
+let bot;
+if (TOKEN) {
+  bot = new TeleBot(TOKEN);
+  console.log("Bot is running");
+} else bot = "";
 
 module.exports = bot;

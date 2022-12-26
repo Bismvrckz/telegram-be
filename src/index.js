@@ -1,13 +1,15 @@
-async function server() {
-  const cors = require("cors");
-  const { server, app, express } = require("./components/socket.io");
-  require("dotenv").config();
+const axios = require("axios");
+const cors = require("cors");
+const { server, app, express } = require("./components/socket.io");
+const { bots } = require("../models");
+const signInRouter = require("./routers/signIn");
+const webhookRouter = require("./routers/webhook");
+const usersRouter = require("./routers/users");
+const messagesRouter = require("./routers/messages");
+require("dotenv").config();
 
-  const botTokenRouter = require("./routers/botToken");
-  const webhookRouter = require("./routers/webhook");
-  const usersRouter = require("./routers/users");
-  const messagesRouter = require("./routers/messages");
-  const { webhookRouterToken } = require("./components/createToken");
+async function serverFunction() {
+  const botsArray = await bots.findAll();
 
   const PORT = process.env.CUSTOM_PORT || 8000;
 
@@ -16,20 +18,31 @@ async function server() {
   app.use("/public", express.static("public"));
 
   app.use("/messages", messagesRouter);
-  app.use("/botToken", botTokenRouter);
+  app.use("/botToken", signInRouter);
   app.use("/users", usersRouter);
 
-  const resWebhookRouterToken = await webhookRouterToken();
-  resWebhookRouterToken.forEach((routerToken) => {
-    const URI = `/webhook/${routerToken.dataValues.webhookToken}`;
-    app.use(URI, webhookRouter);
-  });
+  if (botsArray.length) {
+    botsArray.map(async ({ dataValues }) => {
+      const { bot_token, server_url } = dataValues;
+      const TELEGRAM_API = `https://api.telegram.org/bot${bot_token}`;
+      const URI = `/webhook/${bot_token}`;
+      const WEBHOOK_URL = server_url + URI + "/updates";
+      const res = await axios.get(
+        `${TELEGRAM_API}/setWebhook?url=${WEBHOOK_URL}`
+      );
+      console.log({ bot_token });
+      console.log(res.data);
+      app.use(URI, webhookRouter);
+    });
+  }
 
   app.use("/public", express.static("public"));
 
   app.use((error, req, res, next) => {
     error.response ? console.log(error.response.data) : console.log({ error });
     error.errorMessage ? "" : (error.errorMessage = error.message);
+
+    console.log(error.response);
 
     const errorObj = {
       status: "Error",
@@ -50,4 +63,4 @@ async function server() {
   });
 }
 
-server();
+serverFunction();

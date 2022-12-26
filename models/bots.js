@@ -13,13 +13,13 @@ module.exports = (sequelize, DataTypes) => {
   }
   bots.init(
     {
-      bot_id: {
+      bot_token: {
         allowNull: false,
         autoIncrement: false,
         primaryKey: true,
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
       },
-      token: {
+      server_url: {
         type: DataTypes.STRING,
       },
     },
