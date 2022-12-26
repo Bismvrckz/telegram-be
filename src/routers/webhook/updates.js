@@ -14,6 +14,7 @@ const router = express.Router();
 async function updatesRecieverFunction(req, res, next) {
   try {
     const { my_chat_member, message, edited_message } = req.body;
+    console.log({ req });
 
     if (my_chat_member) {
       const { status } = my_chat_member.new_chat_member;

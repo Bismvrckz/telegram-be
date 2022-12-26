@@ -1,0 +1,8 @@
+
+TOKEN="5964112194:AAENMI54OGX4knhivI8xFuKKTRTAgJTfFuk"
+SERVER_URL="https://20c3-114-10-70-139.ngrok.io"
+DATE="Mon Dec 26 2022 14:43:16 GMT+0700 (Western Indonesia Time)"
+
+TOKEN="5887831734:AAH7iEqFXTkodp_rUDDwd5v5PQZSDYTM83s"
+SERVER_URL="https://20c3-114-10-70-139.ngrok.io"
+DATE="Mon Dec 26 2022 14:47:47 GMT+0700 (Western Indonesia Time)"

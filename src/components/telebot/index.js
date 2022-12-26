@@ -3,6 +3,10 @@ require("dotenv").config();
 
 const { TOKEN } = process.env;
 
-const bot = new TeleBot(TOKEN);
+let bot;
+if (TOKEN) {
+  bot = new TeleBot(TOKEN);
+  console.log("Bot is running");
+} else bot = "";
 
 module.exports = bot;
