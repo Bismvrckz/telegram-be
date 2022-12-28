@@ -2,7 +2,7 @@ const axios = require("axios");
 const cors = require("cors");
 const { server, app, express } = require("./components/socket.io");
 const { bots } = require("../models");
-const signInRouter = require("./routers/signIn");
+const botTokenRouter = require("./routers/botToken");
 const webhookRouter = require("./routers/webhook");
 const usersRouter = require("./routers/users");
 const messagesRouter = require("./routers/messages");
@@ -10,19 +10,17 @@ require("dotenv").config();
 
 async function serverFunction() {
   const botsArray = await bots.findAll();
-
   const PORT = process.env.CUSTOM_PORT || 8000;
 
   app.use(cors());
   app.use(express.json());
   app.use("/public", express.static("public"));
-
   app.use("/messages", messagesRouter);
-  app.use("/botToken", signInRouter);
+  app.use("/botToken", botTokenRouter);
   app.use("/users", usersRouter);
 
   if (botsArray.length) {
-    botsArray.map(async ({ dataValues }) => {
+    botsArray.map(async ({ dataValues }, i) => {
       const { bot_token, server_url } = dataValues;
       const TELEGRAM_API = `https://api.telegram.org/bot${bot_token}`;
       const URI = `/webhook/${bot_token}`;
@@ -30,10 +28,10 @@ async function serverFunction() {
       const res = await axios.get(
         `${TELEGRAM_API}/setWebhook?url=${WEBHOOK_URL}`
       );
-      console.log({ bot_token });
       console.log(res.data);
       app.use(URI, webhookRouter);
     });
+    console.log({ bots: botsArray.length });
   }
 
   app.use("/public", express.static("public"));

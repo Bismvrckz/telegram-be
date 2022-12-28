@@ -15,8 +15,14 @@ module.exports = (sequelize, DataTypes) => {
   }
   messages.init(
     {
+      message_id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
       user_id: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         references: {
           model: "users",
           key: "user_id",
@@ -24,10 +30,7 @@ module.exports = (sequelize, DataTypes) => {
         onUpdate: "CASCADE",
         onDelete: "SET NULL",
       },
-      message_id: {
-        allowNull: false,
-        autoIncrement: false,
-        primaryKey: true,
+      user_message_id: {
         type: DataTypes.BIGINT,
       },
       messageType: {

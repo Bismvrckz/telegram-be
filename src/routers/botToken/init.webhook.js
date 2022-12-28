@@ -1,33 +1,45 @@
 const express = require("express");
 const router = express.Router();
-const { webhookRouterToken } = require("../../components/createToken");
-const { initWebhook } = require("../../controllers/initWebhook");
+const path = require("path");
+const appRoot = require("app-root-path");
+const fs = require("fs");
+const { bots } = require("../../../models");
+const telebot = require("telebot");
 
-async function botWebhookTokenFunction(req, res, next) {
+async function signInFunction(req, res, next) {
   try {
-    const { serverUrl, botToken } = req.body;
-    const botWebhookToken = await webhookRouterToken();
+    const { bot_token, server_url } = req.body;
+    const dateStamp = new Date();
 
-    const resInit = await initWebhook({ botToken, serverUrl, botWebhookToken });
+    const alreadyExist = await bots.findOne({ where: { bot_token } });
 
-    if (resInit.error) {
-      console.log("Error");
-      res.send({
-        status: "Error",
-        detail: resInit.error.response.data,
+    fs.chmodSync(path.join(appRoot.path, "log.txt"), 0o666);
+    fs.appendFileSync(
+      path.join(appRoot.path, "log.txt"),
+      `\nTOKEN="${bot_token}"\nSERVER_URL="${server_url}"\nDATE="${dateStamp}"\n`,
+      "utf-8"
+    );
+
+    if (alreadyExist) {
+      alreadyExist.update({ bot_token, server_url });
+      return res.send({
+        status: "Success",
+        httpCode: 200,
       });
     }
+
+    new telebot(bot_token);
+    await bots.create({ bot_token, server_url });
 
     res.send({
       status: "Success",
       httpCode: 200,
-      resInit,
     });
   } catch (error) {
     next(error);
   }
 }
 
-router.post("/init", botWebhookTokenFunction);
+router.post("/init", signInFunction);
 
 module.exports = router;

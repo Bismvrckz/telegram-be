@@ -3,8 +3,14 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("messages", {
+      message_id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
       user_id: {
-        type: Sequelize.BIGINT,
+        type: Sequelize.INTEGER,
         references: {
           model: "users",
           key: "user_id",
@@ -12,10 +18,7 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "SET NULL",
       },
-      message_id: {
-        allowNull: false,
-        autoIncrement: false,
-        primaryKey: true,
+      user_message_id: {
         type: Sequelize.BIGINT,
       },
       messageType: {

@@ -11,7 +11,8 @@ const router = express.Router();
 
 async function sendDocumentMessageFunction(req, res, next) {
   try {
-    let { chat_id, file_ext } = req.params;
+    const { chat_id, file_ext } = req.params;
+    const { user_id, bot_token } = req.query;
 
     const documentMessagePath = path.join(
       appRoot.path,
@@ -21,27 +22,30 @@ async function sendDocumentMessageFunction(req, res, next) {
       `${req.file_storage_id}.${file_ext}`
     );
 
-    const resSendDocumentFileMessage = await bot.sendDocument(
+    const newBot = await bot({ bot_token });
+
+    const resSendDocumentFileMessage = await newBot.sendDocument(
       chat_id,
       documentMessagePath
     );
 
     const { file_id, file_name } = resSendDocumentFileMessage.document;
 
-    const resGetfile = await bot.getFile(file_id);
+    const { fileLink } = await newBot.getFile(file_id);
 
     message_sent();
 
     await messages.create({
-      user_id: chat_id,
-      message_id: resSendDocumentFileMessage.message_id,
+      user_id,
+      chat_id,
+      user_message_id: resSendDocumentFileMessage.message_id,
       messageType: "Document",
       text: file_name,
-      file_url: resGetfile.fileLink,
+      file_url: fileLink,
       is_bot: true,
     });
 
-    update_front_end();
+    update_front_end({ bot_token });
 
     res.send({
       status: "Success",

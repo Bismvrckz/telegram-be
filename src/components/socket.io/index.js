@@ -15,15 +15,16 @@ const io = new Server(server, {
   },
 });
 
-const update_front_end = async () => {
+const update_front_end = async ({ bot_token }) => {
   front_end_updated();
 
   const updated_user = await users.findAll({
+    where: { bot_token },
     include: messages,
     order: [[messages, "updatedAt", "DESC"]],
   });
 
-  io.emit("update_new", { updated_user });
+  io.emit(`update_new:${bot_token}`, { updated_user });
 };
 
 module.exports = { io, server, update_front_end, app, express };

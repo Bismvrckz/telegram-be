@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const postSignInRouter = require("./init.webHook.js");
+const initBotWebhookRouter = require("./init.webHook.js");
 
 router.use(initBotWebhookRouter);
 

@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "user_id",
       });
       users.belongsTo(models.bots, {
-        foreignKey: "bot_id",
+        foreignKey: "bot_token",
       });
     }
   }
@@ -20,11 +20,22 @@ module.exports = (sequelize, DataTypes) => {
     {
       user_id: {
         allowNull: false,
-        autoIncrement: false,
+        autoIncrement: true,
         primaryKey: true,
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
       },
-      bot_id: {},
+      chat_id: {
+        type: DataTypes.STRING,
+      },
+      bot_token: {
+        type: DataTypes.STRING,
+        references: {
+          model: "bots",
+          key: "bot_token",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
+      },
       is_bot: {
         type: DataTypes.BOOLEAN,
       },

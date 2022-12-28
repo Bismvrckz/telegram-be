@@ -5,9 +5,21 @@ module.exports = {
     await queryInterface.createTable("users", {
       user_id: {
         allowNull: false,
-        autoIncrement: false,
+        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.BIGINT,
+        type: Sequelize.INTEGER,
+      },
+      chat_id: {
+        type: Sequelize.STRING,
+      },
+      bot_token: {
+        type: Sequelize.STRING,
+        references: {
+          model: "bots",
+          key: "bot_token",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
       },
       is_bot: {
         type: Sequelize.BOOLEAN,

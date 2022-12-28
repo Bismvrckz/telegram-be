@@ -7,32 +7,73 @@ const {
   documentProxy,
 } = require("../../controllers/botProxy");
 const router = express.Router();
+const { users } = require("../../../models");
 
 async function proxyMessageFunction(req, res, next) {
   try {
-    const { destination_id } = req.params;
-    const { from, message_id } = req.body;
+    const { from, message_id, to } = req.body;
+    const { bot_token } = req.query;
 
-    const resForwardBot = await bot.forwardMessage(
-      destination_id,
+    const destination_id = (await users.findOne({ where: { user_id: to } }))
+      .dataValues.chat_id;
+    const from_id = (await users.findOne({ where: { user_id: from } }))
+      .dataValues.chat_id;
+
+    console.log({
       from,
+      to,
+      from_id,
+      destination_id,
+      message_id,
+      bot_token,
+    });
+
+    const newBot = await bot({ bot_token });
+
+    const resForwardBot = await newBot.forwardMessage(
+      destination_id,
+      from_id,
       parseInt(message_id)
     );
 
     message_sent();
 
     if (resForwardBot.photo) {
-      return imageProxy({ req, res, next, resForwardBot, fromBot: true });
+      return imageProxy({
+        req,
+        res,
+        next,
+        bot_token,
+        resForwardBot,
+        fromBot: true,
+        from_user_id: to,
+      });
     } else if (resForwardBot.document) {
-      return documentProxy({ req, res, next, resForwardBot, fromBot: true });
+      return documentProxy({
+        req,
+        res,
+        next,
+        bot_token,
+        resForwardBot,
+        fromBot: true,
+        from_user_id: to,
+      });
     } else {
-      return textProxy({ req, res, next, resForwardBot, fromBot: true });
+      return textProxy({
+        req,
+        res,
+        next,
+        bot_token,
+        resForwardBot,
+        fromBot: true,
+        from_user_id: to,
+      });
     }
   } catch (error) {
     next(error);
   }
 }
 
-router.post("/proxy/:destination_id", proxyMessageFunction);
+router.post("/proxy/", proxyMessageFunction);
 
 module.exports = router;

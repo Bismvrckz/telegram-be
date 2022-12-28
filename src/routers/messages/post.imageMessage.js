@@ -12,12 +12,12 @@ const router = express.Router();
 
 async function sendImageUrlMessageFunction(req, res, next) {
   try {
-    const { chat_id, URL, caption } = req.body;
+    const { chat_id, user_id, bot_token, image_url, caption } = req.body;
 
     const resSendImageMessageTelegram = await axios.post(
-      "https://api.telegram.org/bot5964112194:AAENMI54OGX4knhivI8xFuKKTRTAgJTfFuk/sendPhoto",
+      `https://api.telegram.org/bot${bot_token}/sendPhoto`,
       {
-        photo: URL,
+        photo: image_url,
         chat_id,
         caption,
       }
@@ -27,22 +27,24 @@ async function sendImageUrlMessageFunction(req, res, next) {
 
     const { file_id } = photo[photo.length - 1];
 
-    const resGetFileTeleBot = await bot.getFile(file_id);
+    const newBot = await bot({ bot_token });
+    const { fileLink } = await newBot.getFile(file_id);
 
     message_sent();
 
     const { result } = resSendImageMessageTelegram.data;
 
     const createImageMessages = await messages.create({
-      user_id: result.chat.id,
-      message_id: result.message_id,
+      user_id,
+      chat_id: result.chat.id,
+      user_message_id: result.message_id,
       messageType: "Image",
       text: caption,
-      file_url: resGetFileTeleBot.fileLink,
+      file_url: fileLink,
       is_bot: true,
     });
 
-    update_front_end();
+    update_front_end({ bot_token });
 
     return res.send({
       status: "Success",
@@ -58,6 +60,8 @@ async function sendImageUrlMessageFunction(req, res, next) {
 async function sendImageFileMessageFunction(req, res, next) {
   try {
     let { chat_id, caption } = req.params;
+    const { user_id, bot_token } = req.query;
+
     const imageMessagePath = path.join(
       appRoot.path,
       "public",
@@ -66,28 +70,29 @@ async function sendImageFileMessageFunction(req, res, next) {
       `${req.image_storage_id}.png`
     );
 
-    console.log({ imageMessagePath });
+    const newBot = await bot({ bot_token });
 
     switch (caption) {
       case "empty_user_input":
-        const resSendFile = await bot.sendPhoto(chat_id, imageMessagePath);
+        const resSendFile = await newBot.sendPhoto(chat_id, imageMessagePath);
 
         const { photo } = resSendFile;
 
         const { file_id } = photo[photo.length - 1];
 
-        const resGetFileTeleBot = await bot.getFile(file_id);
+        var { fileLink } = await newBot.getFile(file_id);
 
         await messages.create({
-          user_id: chat_id,
-          message_id: resSendFile.message_id,
+          user_id,
+          chat_id,
+          user_message_id: resSendFile.message_id,
           messageType: "Image",
           text: "",
-          file_url: resGetFileTeleBot.fileLink,
+          file_url: fileLink,
           is_bot: true,
         });
 
-        update_front_end();
+        update_front_end({ bot_token });
 
         return res.send({
           status: "Success",
@@ -95,7 +100,7 @@ async function sendImageFileMessageFunction(req, res, next) {
         });
 
       default:
-        const resSendFile_withCapt = await bot.sendPhoto(
+        const resSendFile_withCapt = await newBot.sendPhoto(
           chat_id,
           imageMessagePath,
           {
@@ -108,18 +113,19 @@ async function sendImageFileMessageFunction(req, res, next) {
         const file_id_withCapt =
           photo_withCapt[photo_withCapt.length - 1].file_id;
 
-        const resGetFileTeleBot2 = await bot.getFile(file_id_withCapt);
+        var { fileLink } = await newBot.getFile(file_id_withCapt);
 
         await messages.create({
-          user_id: chat_id,
-          message_id: resSendFile_withCapt.message_id,
+          user_id,
+          chat_id,
+          user_message_id: resSendFile_withCapt.message_id,
           messageType: "Image",
           text: caption,
-          file_url: resGetFileTeleBot2.fileLink,
+          file_url: fileLink,
           is_bot: true,
         });
 
-        update_front_end();
+        update_front_end({ bot_token });
 
         res.send({
           status: "Success",
