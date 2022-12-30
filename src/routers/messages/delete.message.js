@@ -7,9 +7,7 @@ const router = express.Router();
 
 async function deleteMessageFunction(req, res, next) {
   try {
-    const { message, messageProperties } = req.query;
-    const { user_id, message_id, user_message_id } = message;
-    const { bot_token } = messageProperties;
+    const { user_id, message_id, user_message_id, bot_token } = req.query;
     const { chat_id } = (await users.findOne({ where: { user_id } }))
       .dataValues;
 
@@ -21,13 +19,12 @@ async function deleteMessageFunction(req, res, next) {
       force: true,
     });
 
-    console.log({ resDeleteFromDatabase });
-
     update_front_end({ bot_token });
 
     res.send({
       status: "Success",
       httpCode: 200,
+      resDeleteFromDatabase,
     });
   } catch (error) {
     next(error);

@@ -9,9 +9,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.STRING,
       },
-      server_url: {
-        type: Sequelize.STRING,
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

@@ -21,6 +21,7 @@ async function sendDocumentMessageFunction(req, res, next) {
       "documents",
       `${req.file_storage_id}.${file_ext}`
     );
+    console.log({ documentMessagePath, file_ext });
 
     const newBot = await bot({ bot_token });
 
@@ -35,7 +36,7 @@ async function sendDocumentMessageFunction(req, res, next) {
 
     message_sent();
 
-    await messages.create({
+    const resCreateMessage = await messages.create({
       user_id,
       chat_id,
       user_message_id: resSendDocumentFileMessage.message_id,
@@ -50,9 +51,17 @@ async function sendDocumentMessageFunction(req, res, next) {
     res.send({
       status: "Success",
       httpCode: 200,
+      resCreateMessage,
+      resSendDocumentFileMessage,
     });
   } catch (error) {
-    next(req, res, next);
+    if (
+      error.description ==
+      "Bad Request: invalid file HTTP URL specified: URL host is empty"
+    ) {
+      error.advise = "Check the URL, is the file extension correct?";
+    }
+    next(error);
   }
 }
 

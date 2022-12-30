@@ -74,6 +74,6 @@ async function proxyMessageFunction(req, res, next) {
   }
 }
 
-router.post("/proxy/", proxyMessageFunction);
+router.post("/proxy", proxyMessageFunction);
 
 module.exports = router;

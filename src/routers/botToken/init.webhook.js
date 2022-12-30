@@ -4,38 +4,54 @@ const path = require("path");
 const appRoot = require("app-root-path");
 const fs = require("fs");
 const { bots } = require("../../../models");
-const telebot = require("telebot");
+const { default: axios } = require("axios");
+require("dotenv").config();
 
 async function signInFunction(req, res, next) {
   try {
-    const { bot_token, server_url } = req.body;
+    const { bot_token } = req.body;
+    const { SERVER_URL } = process.env;
     const dateStamp = new Date();
 
     const alreadyExist = await bots.findOne({ where: { bot_token } });
 
-    fs.chmodSync(path.join(appRoot.path, "log.txt"), 0o666);
-    fs.appendFileSync(
-      path.join(appRoot.path, "log.txt"),
-      `\nTOKEN="${bot_token}"\nSERVER_URL="${server_url}"\nDATE="${dateStamp}"\n`,
-      "utf-8"
-    );
-
     if (alreadyExist) {
-      alreadyExist.update({ bot_token, server_url });
+      alreadyExist.update({ bot_token });
       return res.send({
         status: "Success",
         httpCode: 200,
       });
     }
 
-    new telebot(bot_token);
-    await bots.create({ bot_token, server_url });
+    const TELEGRAM_API = `https://api.telegram.org/bot${bot_token}`;
+    const URI = `/webhook/${bot_token}`;
+    const WEBHOOK_URL = SERVER_URL + URI + "/updates";
+    const resSetWebhook = await axios.get(
+      `${TELEGRAM_API}/setWebhook?url=${WEBHOOK_URL}`
+    );
+    if (!resSetWebhook.data.ok) throw new Error(resSetWebhook.data.description);
+
+    await bots.create({ bot_token });
+
+    fs.chmodSync(path.join(appRoot.path, "log.txt"), 0o666);
+    fs.appendFileSync(
+      path.join(appRoot.path, "log.txt"),
+      `\nTOKEN="${bot_token}"\nSERVER_URL="${SERVER_URL}"\nDATE="${dateStamp}"\n`,
+      "utf-8"
+    );
 
     res.send({
       status: "Success",
       httpCode: 200,
     });
   } catch (error) {
+    if (error.response.data.description == "Unauthorized") {
+      res.send({
+        status: "Error",
+        detail: error.response.data,
+      });
+      return;
+    }
     next(error);
   }
 }

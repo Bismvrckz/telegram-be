@@ -37,7 +37,7 @@ async function updatesRecieverFunction(req, res, next) {
         await users.findOne({
           where: { bot_token, chat_id: `${message.from.id}` },
         })
-      ).dataValues.user_id;
+      )?.dataValues.user_id;
 
       if (message.forward_from) {
         return proxyMessageFunction({

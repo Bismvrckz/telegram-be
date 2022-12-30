@@ -20,15 +20,9 @@ async function serverFunction() {
   app.use("/users", usersRouter);
 
   if (botsArray.length) {
-    botsArray.map(async ({ dataValues }, i) => {
-      const { bot_token, server_url } = dataValues;
-      const TELEGRAM_API = `https://api.telegram.org/bot${bot_token}`;
+    botsArray.map(async ({ dataValues }) => {
+      const { bot_token } = dataValues;
       const URI = `/webhook/${bot_token}`;
-      const WEBHOOK_URL = server_url + URI + "/updates";
-      const res = await axios.get(
-        `${TELEGRAM_API}/setWebhook?url=${WEBHOOK_URL}`
-      );
-      console.log(res.data);
       app.use(URI, webhookRouter);
     });
     console.log({ bots: botsArray.length });
@@ -39,8 +33,6 @@ async function serverFunction() {
   app.use((error, req, res, next) => {
     error.response ? console.log(error.response.data) : console.log({ error });
     error.errorMessage ? "" : (error.errorMessage = error.message);
-
-    console.log(error.response);
 
     const errorObj = {
       status: "Error",

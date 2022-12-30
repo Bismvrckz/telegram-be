@@ -34,6 +34,7 @@ const saveDocument = multer({
     },
     filename: function (req, file, cb) {
       const extname = path.extname(file.originalname);
+      console.log({ extname });
       cb(null, `${req.file_storage_id + extname}`);
     },
   }),

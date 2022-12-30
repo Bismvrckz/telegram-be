@@ -14,30 +14,25 @@ async function sendImageUrlMessageFunction(req, res, next) {
   try {
     const { chat_id, user_id, bot_token, image_url, caption } = req.body;
 
-    const resSendImageMessageTelegram = await axios.post(
-      `https://api.telegram.org/bot${bot_token}/sendPhoto`,
-      {
-        photo: image_url,
-        chat_id,
-        caption,
-      }
-    );
+    const newBot = await bot({ bot_token });
+    const resNewBot = await newBot.sendPhoto(chat_id, image_url, {
+      caption,
+    });
 
-    const { photo } = resSendImageMessageTelegram.data.result;
+    const { photo } = resNewBot;
 
     const { file_id } = photo[photo.length - 1];
 
-    const newBot = await bot({ bot_token });
     const { fileLink } = await newBot.getFile(file_id);
 
     message_sent();
 
-    const { result } = resSendImageMessageTelegram.data;
+    const { chat, message_id } = resNewBot;
 
     const createImageMessages = await messages.create({
       user_id,
-      chat_id: result.chat.id,
-      user_message_id: result.message_id,
+      chat_id: chat.id,
+      user_message_id: message_id,
       messageType: "Image",
       text: caption,
       file_url: fileLink,
@@ -49,7 +44,7 @@ async function sendImageUrlMessageFunction(req, res, next) {
     return res.send({
       status: "Success",
       httpCode: 200,
-      resTelegramPost: resSendImageMessageTelegram.data,
+      resTelegramPost: resNewBot,
       createImageMessages,
     });
   } catch (error) {
@@ -71,6 +66,7 @@ async function sendImageFileMessageFunction(req, res, next) {
     );
 
     const newBot = await bot({ bot_token });
+    console.log({ imageMessagePath });
 
     switch (caption) {
       case "empty_user_input":
@@ -82,7 +78,7 @@ async function sendImageFileMessageFunction(req, res, next) {
 
         var { fileLink } = await newBot.getFile(file_id);
 
-        await messages.create({
+        var createMessage = await messages.create({
           user_id,
           chat_id,
           user_message_id: resSendFile.message_id,
@@ -97,6 +93,8 @@ async function sendImageFileMessageFunction(req, res, next) {
         return res.send({
           status: "Success",
           httpCode: 200,
+          resSendFile,
+          createMessage,
         });
 
       default:
@@ -115,7 +113,7 @@ async function sendImageFileMessageFunction(req, res, next) {
 
         var { fileLink } = await newBot.getFile(file_id_withCapt);
 
-        await messages.create({
+        var createMessage = await messages.create({
           user_id,
           chat_id,
           user_message_id: resSendFile_withCapt.message_id,
@@ -130,6 +128,8 @@ async function sendImageFileMessageFunction(req, res, next) {
         res.send({
           status: "Success",
           httpCode: 200,
+          resSendFile_withCapt,
+          createMessage,
         });
     }
   } catch (error) {

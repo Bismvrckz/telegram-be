@@ -94,3 +94,47 @@ DATE="Wed Dec 28 2022 14:00:37 GMT+0700 (Western Indonesia Time)"
 TOKEN="5964112194:AAENMI54OGX4knhivI8xFuKKTRTAgJTfFuk"
 SERVER_URL="https://b635-114-10-70-139.ngrok.io"
 DATE="Wed Dec 28 2022 14:01:32 GMT+0700 (Western Indonesia Time)"
+
+TOKEN="5964112194:AAENMI54OGX4knhivI8xFuKKTRTAgJTfFuk"
+SERVER_URL="https://505e-114-10-28-171.ngrok.o"
+DATE="Wed Dec 28 2022 14:32:01 GMT+0700 (Western Indonesia Time)"
+
+TOKEN="5964112194:AAENMI54OGX4knhivI8xFuKKTRTAgJTfFuk"
+SERVER_URL="https://5fad-114-10-70-139.ngrok.io"
+DATE="Wed Dec 28 2022 14:33:02 GMT+0700 (Western Indonesia Time)"
+
+TOKEN="5887831734:AAH7iEqFXTkodp_rUDDwd5v5PQZSDYTM83s"
+SERVER_URL="https://5fad-114-10-70-139.ngrok.io"
+DATE="Wed Dec 28 2022 14:42:06 GMT+0700 (Western Indonesia Time)"
+
+TOKEN="5887831734:AAH7iEqFXTkodp_rUDDwd5v5PQZSDYTM83s"
+SERVER_URL="https://5fad-114-10-70-139.ngrok.io"
+DATE="Wed Dec 28 2022 17:48:33 GMT+0700 (Western Indonesia Time)"
+
+TOKEN="5887831734:AH7iEqFXTkodp_rUDDwd5v5PQZSDYTM83s"
+SERVER_URL="https://5fad-114-10-70-139.ngrok.io"
+DATE="Wed Dec 28 2022 17:48:54 GMT+0700 (Western Indonesia Time)"
+
+TOKEN="5887831734:AH7iEqFXTkodp_rUDDwd5v5PQZSDYTM83s"
+SERVER_URL="https://5fad-114-10-70-139.ngrok.io"
+DATE="Wed Dec 28 2022 17:48:56 GMT+0700 (Western Indonesia Time)"
+
+TOKEN="5887831734:AH7iEqFXTkodp_rUDDwd5v5PQZSDYTM83s"
+SERVER_URL="https://5fad-114-10-70-139.ngrok.io"
+DATE="Wed Dec 28 2022 17:51:58 GMT+0700 (Western Indonesia Time)"
+
+TOKEN="5887831734:AH7iEqFXTkodp_rUDDwd5v5PQZSDYTM83s"
+SERVER_URL="https://5fad-114-10-70-139.ngrok.io"
+DATE="Wed Dec 28 2022 18:00:43 GMT+0700 (Western Indonesia Time)"
+
+TOKEN="5887831734:AH7iEqFXTkodp_rUDDwd5v5PQZSDYTM83s"
+SERVER_URL="https://5fad-114-10-70-139.ngrok.io"
+DATE="Wed Dec 28 2022 18:00:56 GMT+0700 (Western Indonesia Time)"
+
+TOKEN="5887831734:AH7iEqFXTkodp_rUDDwd5v5PQZSDYTM83s"
+SERVER_URL="https://5fad-114-10-70-139.ngrok.io"
+DATE="Wed Dec 28 2022 18:01:09 GMT+0700 (Western Indonesia Time)"
+
+TOKEN="5887831734:AAH7iEqFXTkodp_rUDDwd5v5PQZSDYTM83s"
+SERVER_URL="https://55ad-103-213-129-169.ngrok.io"
+DATE="Thu Dec 29 2022 15:41:20 GMT+0700 (Western Indonesia Time)"

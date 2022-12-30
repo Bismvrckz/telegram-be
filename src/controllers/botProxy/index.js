@@ -14,7 +14,7 @@ async function textProxy({
   try {
     const { id, is_bot, first_name, username } = resForwardBot.forward_from;
 
-    await messages.create({
+    const resCreateMessage = await messages.create({
       user_id: from_user_id,
       chat_id: req.params.destination_id || resForwardBot.from.id,
       user_message_id: resForwardBot.message_id,
@@ -34,6 +34,7 @@ async function textProxy({
     res.send({
       status: "Success",
       httpCode: 200,
+      resCreateMessage,
     });
   } catch (error) {
     next(error);
@@ -57,7 +58,7 @@ async function imageProxy({
     const newBot = await bot({ bot_token });
     const { fileLink } = await newBot.getFile(file_id);
 
-    await messages.create({
+    const resCreateMessage = await messages.create({
       user_id: from_user_id,
       chat_id: req.params.destination_id || resForwardBot.from.id,
       user_message_id: resForwardBot.message_id,
@@ -78,6 +79,7 @@ async function imageProxy({
     res.send({
       status: "Success",
       httpCode: 200,
+      resCreateMessage,
     });
   } catch (error) {
     next(error);
@@ -101,7 +103,7 @@ async function documentProxy({
     const newBot = await bot({ bot_token });
     const { fileLink } = await newBot.getFile(file_id);
 
-    await messages.create({
+    const resCreateMessage = await messages.create({
       user_id: from_user_id,
       chat_id: req.params.destination_id || resForwardBot.from.id,
       message_id: resForwardBot.message_id,
@@ -122,6 +124,7 @@ async function documentProxy({
     res.send({
       status: "Success",
       httpCode: 200,
+      resCreateMessage,
     });
   } catch (error) {
     next(error);

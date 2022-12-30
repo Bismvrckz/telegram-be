@@ -1,4 +1,3 @@
-const { default: axios } = require("axios");
 const express = require("express");
 const { messages } = require("../../../models");
 const { message_sent } = require("../../components/alerts");
@@ -10,13 +9,13 @@ async function sendMessageFunction(req, res, next) {
   try {
     const { chat_id, text, user_id, bot_token } = req.body;
     const newBot = await bot({ bot_token });
-    const resNewBot = await newBot.sendMessage(chat_id, text);
+    const resBotSendMessage = await newBot.sendMessage(chat_id, text);
 
-    const { message_id } = resNewBot;
+    const { message_id } = resBotSendMessage;
 
     message_sent();
 
-    await messages.create({
+    const resCreateMessage = await messages.create({
       user_id,
       chat_id,
       user_message_id: message_id,
@@ -30,6 +29,8 @@ async function sendMessageFunction(req, res, next) {
     res.send({
       status: "Success",
       httpCode: 200,
+      resBotSendMessage,
+      resCreateMessage,
     });
   } catch (error) {
     next(error);
