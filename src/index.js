@@ -1,4 +1,3 @@
-const axios = require("axios");
 const cors = require("cors");
 const { server, app, express } = require("./components/socket.io");
 const { bots } = require("../models");
@@ -8,7 +7,7 @@ const usersRouter = require("./routers/users");
 const messagesRouter = require("./routers/messages");
 require("dotenv").config();
 
-async function serverFunction() {
+(async () => {
   const botsArray = await bots.findAll();
   const PORT = process.env.CUSTOM_PORT || 8000;
 
@@ -51,6 +50,4 @@ async function serverFunction() {
       console.log(`SERVER RUNNING at ${PORT} ✅`);
     }
   });
-}
-
-serverFunction();
+})();

@@ -12,14 +12,14 @@ const saveImage = multer({
     },
   }),
   limits: {
-    fileSize: 10485760,
+    fileSize: 8388608,
   },
   fileFilter(req, file, cb) {
-    const allowedExtension = [".jpg", ".jpeg", ".png"];
+    const allowedExtension = [".jpeg", ".png"];
     const extname = path.extname(file.originalname);
     if (!allowedExtension.includes(extname)) {
       const error = new Error(
-        "Invalid file extension. You can only upload jpg, jpeg, png file."
+        "Invalid file extension. You can only upload jpeg, png file."
       );
       return cb(error);
     }
